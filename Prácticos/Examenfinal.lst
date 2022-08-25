@@ -1,0 +1,93 @@
+     1                                  ;--------------------------------------------------------------------------
+     2                                  ; assemble: -->> nasm -f win64 -o Examenfinal.o Examenfinal.asm -l Examenfinal.lst
+     3                                  ; link:	   -->> gcc -o Examenfinal Examenfinal.o 
+     4                                  ;--------------------------------------------------------------------------
+     5                                  ; Nombres y Apellidos: Benjamin Condori Vasquez
+     6                                  ; Registro: Examenfinal
+     7                                  ;--------------------------------------------------------------------------
+     8                                  
+     9                                  global main
+    10                                  extern printf, scanf, gets, strlen
+    11                                  
+    12                                  segment .data
+    13                                  
+    14 00000000 0A496E677265736172-     	m1	db  10, "Ingresar cadena (máx. 20 caracteres): ", 0
+    14 00000009 20636164656E612028-
+    14 00000012 6DC3A1782E20323020-
+    14 0000001B 636172616374657265-
+    14 00000024 73293A2000         
+    15 00000029 0A4E75657661206361-     	m2  db  10, "Nueva cadena: %s", 10, 0
+    15 00000032 64656E613A2025730A-
+    15 0000003B 00                 
+    16                                  
+    17                                  segment .bss
+    18                                  
+    19 00000000 <res 14h>               	cadena1  resb  20
+    20 00000014 <res 14h>               	cadena2  resb  20
+    21                                  
+    22                                  segment .text
+    23                                  main:
+    24                                  
+    25 00000000 4883EC20                sub rsp, 0x20
+    26                                  
+    27 00000004 48B9-                   	mov rcx, m1
+    27 00000006 [0000000000000000] 
+    28 0000000E E8(00000000)            	call printf
+    29                                  	
+    30 00000013 48B9-                   	mov rcx, cadena1
+    30 00000015 [0000000000000000] 
+    31 0000001D E8(00000000)            	call gets
+    32                                  	
+    33 00000022 48B9-                   	mov rcx, cadena1
+    33 00000024 [0000000000000000] 
+    34 0000002C E8(00000000)            	call strlen
+    35                                  	
+    36 00000031 48B9-                   	mov rcx, cadena1
+    36 00000033 [0000000000000000] 
+    37 0000003B 48BA-                   	mov rdx, cadena2
+    37 0000003D [1400000000000000] 
+    38 00000045 E81E000000              	call copiar
+    39                                  	
+    40 0000004A 48B9-                   	mov rcx, m2
+    40 0000004C [2900000000000000] 
+    41 00000054 48BA-                   	mov rdx, cadena2
+    41 00000056 [1400000000000000] 
+    42 0000005E E8(00000000)            	call printf
+    43                                  
+    44 00000063 4883C420                add rsp, 0x20
+    45                                  
+    46 00000067 C3                      ret
+    47                                  
+    48                                  ;---------------------------------------------------------------------------
+    49                                  ;............Subrutinas............
+    50                                  ;---------------------------------------------------------------------------
+    51                                  
+    52                                  copiar:
+    53                                  	
+    54 00000068 4889CB                  	mov rbx, rcx	; direccion de la cadena1
+    55 0000006B 4889C1                  	mov rcx, rax
+    56                                  	
+    57 0000006E 4831C0                  	xor rax, rax
+    58                                  	
+    59                                  	ciclo:
+    60                                  	
+    61 00000071 8A03                    		mov al, [rbx]
+    62 00000073 3C30                    		cmp al, 0x30
+    63 00000075 7C0B                    		jl noCopiar
+    64 00000077 3C39                    		cmp al, 0x39
+    65 00000079 7E02                    		jle siCopiar
+    66 0000007B EB05                    		jmp noCopiar
+    67                                  		
+    68                                  		siCopiar:
+    69 0000007D 8802                    			mov [rdx], al
+    70 0000007F 48FFC2                  			inc rdx
+    71                                  		
+    72                                  		noCopiar:
+    73 00000082 48FFC3                  			inc rbx
+    74                                  	
+    75 00000085 E2EA                    	loop ciclo
+    76                                  
+    77 00000087 C3                      ret
+    78                                  
+    79                                  
+    80                                  
