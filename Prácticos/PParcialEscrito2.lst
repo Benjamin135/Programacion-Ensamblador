@@ -1,0 +1,40 @@
+     1                                  
+     2                                  segment .data
+     3                                  
+     4 00000000 0AEC1EF5                	arreglo   DB  0X0A, 0XEC, 0X1E, 0XF5 
+     5 00000004 62697435                	cadena 	  DB  "bit5"
+     6                                  
+     7                                  segment .bss
+     8                                  
+     9                                  segment .text
+    10                                  global main
+    11                                  main:
+    12                                  
+    13 00000000 B800000000              		MOV EAX, 0
+    14 00000005 BB00000000              		MOV EBX, 0
+    15 0000000A B900000000              		MOV ECX, 0
+    16 0000000F BA00000000              		MOV EDX, 0
+    17                                  
+    18 00000014 8A1425[07000000]        		MOV DL, [cadena+3]
+    19 0000001B 80F230                  		XOR DL, 0X30
+    20 0000001E B9[00000000]            		MOV ECX, arreglo
+    21 00000023 678A01                  		MOV AL, [ECX]
+    22 00000026 BB00000000              		MOV EBX, 0X0
+    23 0000002B 39D3                    		CMP EBX, EDX
+    24 0000002D 7D10                    		JGE .EE3
+    25                                  
+    26                                  .EE1:	
+    27 0000002F 67380419                		CMP [ECX+EBX*1], AL
+    28 00000033 7D04                    		JGE .EE2
+    29 00000035 678A0419                		MOV AL, [ECX+EBX*1]
+    30                                  		
+    31                                  .EE2:
+    32 00000039 FFC3                    		INC EBX
+    33 0000003B 39D3                    		CMP EBX, EDX
+    34 0000003D 7CF0                    		JL .EE1
+    35                                  		
+    36                                  .EE3:	
+    37 0000003F 67884104                		MOV [ECX+4], AL
+    38 00000043 C0E003                  		SAL AL, 3
+    39                                  
+    40 00000046 C3                      		RET

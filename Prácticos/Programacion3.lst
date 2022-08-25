@@ -1,0 +1,47 @@
+     1                                  ; -------------------------------------------------------------------------------------
+     2                                  ; assemble: -->> nasm -f win64 -o Programacion3.o Programacion3.asm -l Programacion3.lst
+     3                                  ; link:	   -->> gcc -o Programacion3 Programacion3.o 
+     4                                  ; -------------------------------------------------------------------------------------
+     5                                  
+     6                                  ; Nombres y Apellidos: Benjamin Condori Vasquez
+     7                                  ; Registro: 220000999
+     8                                  
+     9                                  
+    10                                  segment .data
+    11                                  ; Aqui se declaran las variables inicializadas
+    12                                  
+    13 00000000 020000000200000000-     	arreglo		dd		2, 2, 0, 0, 0, 0, 9, 9, 9, 1, 9
+    13 00000009 000000000000000000-
+    13 00000012 000000000000090000-
+    13 0000001B 000900000009000000-
+    13 00000024 0100000009000000   
+    14                                  
+    15                                  segment .bss
+    16                                  ; Aqui se declaran las variables sin inicializar
+    17                                  
+    18 00000000 ????????                	suma	resd	1
+    19                                  
+    20                                  segment .text
+    21                                  global main
+    22                                  main:
+    23                                  ; Aqui van las instrucciones
+    24                                  
+    25                                  	; “índices” del arreglo: 2, 3, 6, 10
+    26                                  	
+    27 00000000 4831C0                  	xor rax, rax 
+    28 00000003 4831DB                  	xor rbx, rbx
+    29                                  	
+    30 00000006 B8[00000000]            	mov eax, arreglo
+    31                                  	
+    32 0000000B 67035808                	add ebx, [eax + 8]
+    33 0000000F 6703580C                	add ebx, [eax + 12]
+    34 00000013 67035818                	add ebx, [eax + 24]
+    35 00000017 67035828                	add ebx, [eax + 40]
+    36                                  	
+    37 0000001B 891C25[00000000]        	mov [suma], ebx
+    38                                  
+    39 00000022 C3                      	ret
+    40                                  
+    41                                  
+    42                                  
+    43                                  

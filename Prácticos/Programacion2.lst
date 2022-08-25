@@ -1,0 +1,57 @@
+     1                                  ; -------------------------------------------------------------------------------------
+     2                                  ; assemble: -->> nasm -f win64 -o Programacion2.o Programacion2.asm -l Programacion2.lst
+     3                                  ; link:	   -->> gcc -o Programacion2 Programacion2.o 
+     4                                  ; -------------------------------------------------------------------------------------
+     5                                  
+     6                                  ; Nombres y Apellidos: Benjamin Condori Vasquez
+     7                                  ; Registro: 220000999
+     8                                  
+     9                                  
+    10                                  segment .data
+    11                                  ; Aqui se declaran las variables inicializadas
+    12                                  
+    13 00000000 B78B8700                	a 	dd	8883127
+    14 00000004 4039D2FF                	b 	dd	-3000000	
+    15 00000008 E7F21C0D                	c 	dd 	220000999	
+    16 0000000C BADCFE00                	d 	dd 	0xFEDCBA	
+    17 00000010 802E0FF7                	e 	dd 	-150000000	
+    18                                  
+    19                                  segment .bss
+    20                                  ; Aqui se declaran las variables sin inicializar
+    21                                  
+    22 00000000 ????????                	x resd	1
+    23                                  
+    24                                  segment .text
+    25                                  global main
+    26                                  main:
+    27                                  ; Aqui van las instrucciones
+    28                                  
+    29                                  	;	x = (a & c) - b ^ d;
+    30                                  	;	x = (x << 5) | (e >> 2);
+    31                                  	;	x = ~x; 
+    32                                  	
+    33 00000000 4831C0                  	xor rax, rax
+    34 00000003 4831DB                  	xor rbx, rbx
+    35 00000006 4831C9                  	xor rcx, rcx
+    36 00000009 4831D2                  	xor rdx, rdx
+    37 0000000C 4831F6                  	xor rsi, rsi 
+    38                                  	
+    39 0000000F 8B0425[00000000]        	mov eax, [a]
+    40 00000016 8B1C25[04000000]        	mov ebx, [b]
+    41 0000001D 8B0C25[08000000]        	mov ecx, [c]
+    42 00000024 8B1425[0C000000]        	mov edx, [d]
+    43 0000002B 8B3425[10000000]        	mov esi, [e]
+    44                                  	
+    45 00000032 21C8                    	and eax, ecx
+    46 00000034 29D8                    	sub eax, ebx
+    47 00000036 31D0                    	xor eax, edx
+    48                                  	
+    49 00000038 C1E005                  	sal eax, 5
+    50 0000003B C1FE02                  	sar esi, 2
+    51 0000003E 09F0                    	or  eax, esi
+    52                                  	
+    53 00000040 F7D0                    	not eax
+    54 00000042 890425[00000000]        	mov [x], eax
+    55                                  
+    56 00000049 C3                      	ret
+    57                                  

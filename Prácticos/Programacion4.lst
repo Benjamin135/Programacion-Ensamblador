@@ -1,0 +1,56 @@
+     1                                  ;--------------------------------------------------------------------------
+     2                                  ; assemble: -->> nasm -f win64 -o Programacion4.o Programacion4.asm -l Programacion4.lst
+     3                                  ; link:	   -->> gcc -o Programacion4 Programacion4.o 
+     4                                  ;--------------------------------------------------------------------------
+     5                                  ; Nombres y Apellidos: Benjamin Condori Vasquez
+     6                                  ; Registro: 220000999
+     7                                  ;--------------------------------------------------------------------------
+     8                                  
+     9                                  segment .data
+    10                                  ; Aqui se declaran las variables inicializadas
+    11                                  
+    12 00000000 02000000                	a 	dd 	2
+    13 00000004 05000000                	b	dd 	5
+    14                                  
+    15                                  segment .bss
+    16                                  ; Aqui se declaran las variables sin inicializar
+    17                                  
+    18 00000000 ????????                	x 	resd  1
+    19                                  
+    20                                  segment .text
+    21                                  global main
+    22                                  main:
+    23                                  ; Aqui van las instrucciones
+    24                                  
+    25 00000000 4831C9                  	xor rcx, rcx
+    26 00000003 4831D2                  	xor rdx, rdx
+    27                                  	
+    28 00000006 8B0C25[00000000]        	mov ecx, [a]
+    29 0000000D 8B1425[04000000]        	mov edx, [b]
+    30 00000014 E808000000              	call calcular
+    31 00000019 890425[00000000]        	mov [x], eax
+    32                                  
+    33 00000020 C3                      ret
+    34                                  
+    35                                  ;---------------------------------------------------------------------------
+    36                                  ;............Subrutinas............
+    37                                  ;---------------------------------------------------------------------------
+    38                                  
+    39                                  calcular:
+    40                                  	;x = ((-a) * b3) / 7
+    41 00000021 F7D9                    	neg ecx
+    42 00000023 4189D2                  	mov r10d, edx
+    43 00000026 410FAFD2                	imul edx, r10d
+    44 0000002A 410FAFD2                	imul edx, r10d
+    45 0000002E 0FAFCA                  	imul ecx, edx
+    46 00000031 89C8                    	mov eax, ecx
+    47 00000033 99                      	cdq
+    48 00000034 41BB07000000            	mov r11d, 7
+    49 0000003A 41F7FB                  	idiv r11d
+    50 0000003D C3                      ret 
+    51                                  
+    52                                  
+    53                                  
+    54                                  
+    55                                  
+    56                                  

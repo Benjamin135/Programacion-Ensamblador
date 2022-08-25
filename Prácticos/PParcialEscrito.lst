@@ -1,0 +1,36 @@
+     1                                  
+     2                                  segment .data
+     3                                  
+     4 00000000 42797465                	aa	db  "Byte"
+     5 00000004 87                      	bb	db  -121
+     6 00000005 20                      	cc  db  +32
+     7                                  
+     8                                  segment .bss
+     9                                  
+    10                                  
+    11                                  
+    12                                  segment .text
+    13                                  global main
+    14 00000000 31C0                    main:	XOR EAX, EAX
+    15 00000002 31DB                    		XOR EBX, EBX
+    16 00000004 31C9                    		xor ECX, ECX
+    17 00000006 8A0425[00000000]        		MOV AL, [aa]
+    18 0000000D 8A1C25[02000000]        		MOV BL, [aa+2]
+    19 00000014 8A0C25[04000000]        		MOV CL, [aa+4]
+    20 0000001B 38D8                    		CMP AL, BL
+    21 0000001D 7318                    		JNC LL1
+    22 0000001F 38CB                    		CMP BL, CL
+    23 00000021 7909                    		JNS LL2
+    24 00000023 881C25[04000000]        		MOV [bb], BL
+    25 0000002A EB1F                    		JMP LL4
+    26 0000002C 345A                    LL2:	XOR AL, 0x5A
+    27 0000002E 880425[05000000]        		MOV [cc], AL
+    28 00000035 EB14                    		JMP LL4
+    29 00000037 38C8                    LL1:	CMP AL, CL
+    30 00000039 7209                    		JC LL3
+    31 0000003B 880425[05000000]        		MOV [cc],AL
+    32 00000042 EB07                    		JMP LL4
+    33 00000044 880C25[04000000]        LL3:	MOV [bb], CL
+    34 0000004B C3                      LL4:	RET
+    35                                  
+    36                                  

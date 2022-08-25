@@ -1,0 +1,53 @@
+     1                                  ;------------------------------------------------------
+     2                                  ;assemble: -->> nasm -f win64 -o Programacion1.o Programacion1.asm -l Programacion1.lst
+     3                                  ;link:	   -->> gcc -o Programacion1 Programacion1.o
+     4                                  ;-----------------------------------------
+     5                                  
+     6                                  ;file: Programacion1.asm (nombre programa)
+     7                                  ;Registro: Programacion1
+     8                                  ;Nombres y Apellidos: Benjamin Condori Vasquez
+     9                                  
+    10                                  extern printf, scanf
+    11                                  
+    12                                  segment .data
+    13                                  ;aqui se declaran las variables inicializadas
+    14                                  
+    15 00000000 E7F21C0D                	t1	dd	  220000999
+    16 00000004 E7FFFFFF                	t2	dd	  -25
+    17 00000008 B78B8700                	t3  dd	  8883127
+    18                                  
+    19                                  segment .bss
+    20                                  ;aqui se declaran las variables sin inicializar
+    21                                  
+    22 00000000 ????????                	t4 resd	  1
+    23                                  
+    24                                  segment .text
+    25                                  global main:
+    26                                  main:
+    27                                  ;aqui van las instrucciones
+    28                                  	
+    29 00000000 4831C0                  	xor rax, rax
+    30 00000003 4831DB                  	xor rbx, rbx
+    31 00000006 4831C9                  	xor rcx, rcx
+    32                                  	
+    33 00000009 8B0425[00000000]        	mov eax, [t1]
+    34 00000010 8B1C25[04000000]        	mov ebx, [t2]
+    35 00000017 8B0C25[08000000]        	mov ecx, [t3]
+    36                                  	
+    37 0000001E 83C00A                  	add eax, 10
+    38 00000021 83EB14                  	sub ebx, 20
+    39 00000024 29D8                    	sub eax, ebx
+    40                                  	
+    41 00000026 83E81E                  	sub eax, 30
+    42 00000029 F7D9                    	neg ecx
+    43 0000002B 29C8                    	sub eax, ecx
+    44 0000002D 890425[00000000]        	mov [t4], eax
+    45                                  	
+    46                                  
+    47 00000034 C3                      ret
+    48                                  
+    49                                  
+    50                                  
+    51                                  
+    52                                  
+    53                                  	

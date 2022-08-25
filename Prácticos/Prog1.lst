@@ -1,0 +1,47 @@
+     1                                  ;---------------------------------------------------------------------------
+     2                                  
+     3                                  extern scanf, printf
+     4                                  
+     5                                  segment .data
+     6                                  ; aqui van las variables inicializadas
+     7                                  
+     8 00000000 E7F21C0D                	t1	dd	220000999
+     9 00000004 E7FFFFFF                	t2 	dd	-25
+    10 00000008 B78B8700                	t3	dd	8883127
+    11                                  
+    12                                  segment .bss
+    13                                  ; aqui van las variables sin inicializar
+    14                                  
+    15 00000000 ????????                	t4	resd	1
+    16                                  
+    17                                  segment .text
+    18                                  
+    19                                  global main
+    20                                  main:
+    21                                  ; aqui van las instrucciones
+    22                                  
+    23                                  	; t4 = (-30 - t1) - (-t2) - t1++
+    24                                  	; t4 = (20 + t4) + (-t3 - 10)
+    25                                  	
+    26 00000000 4831D2                  	xor rdx, rdx
+    27                                  	
+    28 00000003 BAE2FFFFFF              	mov edx, -30
+    29 00000008 2B1425[00000000]        	sub edx, [t1]
+    30 0000000F F71C25[04000000]        	neg dword[t2]
+    31 00000016 2B1425[04000000]        	sub edx, [t2]
+    32 0000001D FF0425[00000000]        	inc dword[t1]
+    33 00000024 2B1425[00000000]        	sub edx, [t1]
+    34                                  	
+    35 0000002B 83C214                  	add edx, 20
+    36 0000002E F71C25[08000000]        	neg dword[t3]
+    37 00000035 832C25[08000000]0A      	sub dword[t3], 10
+    38 0000003D 031425[08000000]        	add edx, [t3]
+    39 00000044 891425[00000000]        	mov [t4], edx
+    40                                  
+    41 0000004B C3                      ret
+    42                                  
+    43                                  
+    44                                  
+    45                                  
+    46                                  
+    47                                  
