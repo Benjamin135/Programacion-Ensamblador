@@ -1,0 +1,138 @@
+     1                                  ;--------------------------------------------------------------------------
+     2                                  ; MODELO EXAMEN FINAL N° 5
+     3                                  ;--------------------------------------------------------------------------
+     4                                  
+     5                                  global main
+     6                                  extern printf, scanf, gets, strlen
+     7                                  
+     8                                  segment .data
+     9                                  
+    10 00000000 0A496E677265736172-     	m1   db   10, "Ingresar la cadena de caracteres (máx. 100 caracteres): ", 0
+    10 00000009 206C6120636164656E-
+    10 00000012 612064652063617261-
+    10 0000001B 63746572657320286D-
+    10 00000024 C3A1782E2031303020-
+    10 0000002D 636172616374657265-
+    10 00000036 73293A2000         
+    11 0000003B 0A4C6120636164656E-     	m2   db   10, "La cadena contiene un conjunto balanceado de paréntesis", 10, 0
+    11 00000044 6120636F6E7469656E-
+    11 0000004D 6520756E20636F6E6A-
+    11 00000056 756E746F2062616C61-
+    11 0000005F 6E636561646F206465-
+    11 00000068 20706172C3A96E7465-
+    11 00000071 7369730A00         
+    12 00000076 0A4C6120636164656E-     	m3   db   10, "La cadena NO contiene un conjunto balanceado de paréntesis", 10, 0
+    12 0000007F 61204E4F20636F6E74-
+    12 00000088 69656E6520756E2063-
+    12 00000091 6F6E6A756E746F2062-
+    12 0000009A 616C616E636561646F-
+    12 000000A3 20646520706172C3A9-
+    12 000000AC 6E74657369730A00   
+    13                                  
+    14                                  segment .bss
+    15                                  
+    16 00000000 <res 64h>               	cadena   resb  100
+    17                                  
+    18                                  segment .text
+    19                                  main:
+    20                                  
+    21 00000000 4883EC20                sub rsp, 0x20
+    22                                  	
+    23 00000004 48B9-                   	mov rcx, m1
+    23 00000006 [0000000000000000] 
+    24 0000000E E8(00000000)            	call printf
+    25                                  	
+    26 00000013 48B9-                   	mov rcx, cadena
+    26 00000015 [0000000000000000] 
+    27 0000001D E8(00000000)            	call gets
+    28                                  	
+    29 00000022 48B9-                   	mov rcx, cadena
+    29 00000024 [0000000000000000] 
+    30 0000002C E8(00000000)            	call strlen
+    31                                  	
+    32 00000031 48B9-                   	mov rcx, cadena
+    32 00000033 [0000000000000000] 
+    33 0000003B 4889C2                  	mov rdx, rax
+    34 0000003E E82D000000              	call isBalanceado
+    35                                  	
+    36 00000043 4883F801                	cmp rax, 1
+    37 00000047 7402                    	je Balanceado
+    38 00000049 EB11                    	jmp noBalanceado
+    39                                  	
+    40                                  	Balanceado:
+    41 0000004B 48B9-                   	mov rcx, m2
+    41 0000004D [3B00000000000000] 
+    42 00000055 E8(00000000)            	call printf
+    43                                  	
+    44 0000005A EB0F                    	jmp finMain
+    45                                  	
+    46                                  	noBalanceado:
+    47 0000005C 48B9-                   	mov rcx, m3
+    47 0000005E [7600000000000000] 
+    48 00000066 E8(00000000)            	call printf
+    49                                  	
+    50                                  	finMain:
+    51                                  	
+    52 0000006B 4883C420                add rsp, 0x20
+    53                                  
+    54 0000006F C3                      ret
+    55                                  
+    56                                  ;---------------------------------------------------------------------------
+    57                                  ;............Subrutinas............
+    58                                  ;---------------------------------------------------------------------------
+    59                                  
+    60                                  isBalanceado:
+    61                                  
+    62 00000070 4889CB                  	mov rbx, rcx		; direccion de la cadena en rbx
+    63 00000073 4889D1                  	mov rcx, rdx
+    64                                  
+    65 00000076 4D31FF                  	xor r15, r15		; contador
+    66 00000079 4831C0                  	xor rax, rax
+    67                                  
+    68                                  	ciclo:
+    69                                  	
+    70 0000007C 8A03                    		mov al, [rbx]
+    71 0000007E 3C28                    		cmp al, 0x28
+    72 00000080 7402                    		je parentesisAbierto
+    73 00000082 EB05                    		jmp compParentCerrado
+    74                                  			
+    75                                  		parentesisAbierto:
+    76 00000084 49FFC7                  			inc r15
+    77 00000087 EB0F                    		jmp fin
+    78                                  		
+    79                                  		compParentCerrado:
+    80 00000089 3C29                    		cmp al, 0x29
+    81 0000008B 7402                    		je esParentesisCerrado
+    82 0000008D EB09                    		jmp fin
+    83                                  		
+    84                                  		esParentesisCerrado:
+    85 0000008F 49FFCF                  			dec r15
+    86                                  			
+    87                                  		; preguntar caso especial si es -1
+    88 00000092 4983FFFF                			cmp r15, -1
+    89 00000096 740B                    			je errorParentesis
+    90                                  		
+    91                                  		fin:
+    92 00000098 48FFC3                  		inc rbx
+    93                                  		
+    94 0000009B E2DF                    	loop ciclo
+    95                                  
+    96 0000009D 4983FF00                cmp r15, 0
+    97 000000A1 7407                    je siSeBalanceo
+    98                                  
+    99                                  errorParentesis:
+   100 000000A3 B800000000              mov rax, 0
+   101 000000A8 EB05                    jmp finBalanceo
+   102                                  
+   103                                  siSeBalanceo:
+   104 000000AA B801000000              mov rax, 1
+   105                                  
+   106                                  finBalanceo:
+   107                                  
+   108 000000AF C3                      ret
+   109                                  
+   110                                  
+   111                                  
+   112                                  
+   113                                  
+   114                                  

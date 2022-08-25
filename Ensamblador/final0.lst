@@ -1,0 +1,120 @@
+     1                                  ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     2                                  ;assemble and link with: 
+     3                                  ;assemble: -->> nasm -f win64 -o 218034121.o 218034121.asm -l 218034121.lst
+     4                                  ;link:	   -->> gcc -o 218034121 218034121.o
+     5                                  ;run:      -->> 218034121
+     6                                  ;debugger: -->> x64dbg 218034121
+     7                                  ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     8                                  ;-----------------------------------------
+     9                                  
+    10                                  ;file: 218034121.asm (nombre programa)
+    11                                  ;registro: 218034121
+    12                                  ;nombres y apellidos: Moises Leonardo Mogiano Gutierrez
+    13                                  
+    14                                  extern printf, scanf, gets, strlen		
+    15                                  
+    16                                  segment .data
+    17                                  ;aqui se declaran variables inicializadas
+    18                                  
+    19 00000000 496E67726573617220-     	m1 db "Ingresar la cadena de caracteres (max. 100 caracteres): ",0
+    19 00000009 6C6120636164656E61-
+    19 00000012 206465206361726163-
+    19 0000001B 746572657320286D61-
+    19 00000024 782E20313030206361-
+    19 0000002D 726163746572657329-
+    19 00000036 3A2000             
+    20 00000039 4C6120636164656E61-     	m2 db "La cadena tiene un total de : %d (digitos + letras mayusculas + minusculas)",10,0
+    20 00000042 207469656E6520756E-
+    20 0000004B 20746F74616C206465-
+    20 00000054 203A20256420286469-
+    20 0000005D 6769746F73202B206C-
+    20 00000066 6574726173206D6179-
+    20 0000006F 757363756C6173202B-
+    20 00000078 206D696E757363756C-
+    20 00000081 6173290A00         
+    21                                  	
+    22                                  segment .bss
+    23                                  ;Block Started by Symbol(BSS) 
+    24                                  ;aqui van las variables declaradas pero sin inicializar
+    25                                  
+    26 00000000 <res 64h>               	cad resb 100
+    27                                  	
+    28                                  segment .text 
+    29                                  
+    30                                  global main 					
+    31                                  main:	
+    32                                  ;etiqueta que indica el comienzo del programa principal
+    33                                  ;aqui van las instrucciones
+    34                                  	
+    35 00000000 4831C0                  	xor rax,rax
+    36 00000003 4831DB                  	xor rbx,rbx
+    37 00000006 4831C9                  	xor rcx,rcx
+    38 00000009 4831D2                  	xor rdx,rdx
+    39                                  
+    40 0000000C 4883EC20                sub rsp,0x20
+    41                                  	
+    42 00000010 48B9-                   	mov rcx,m1
+    42 00000012 [0000000000000000] 
+    43 0000001A E8(00000000)            	call printf
+    44                                  	
+    45 0000001F 48B9-                   	mov rcx,cad
+    45 00000021 [0000000000000000] 
+    46 00000029 E8(00000000)            	call gets
+    47                                  	
+    48 0000002E 48B9-                   	mov rcx,cad
+    48 00000030 [0000000000000000] 
+    49 00000038 E8(00000000)            	call strlen
+    50                                  	
+    51 0000003D 48B9-                   	mov rcx,cad
+    51 0000003F [0000000000000000] 
+    52 00000047 4889C2                  	mov rdx,rax
+    53                                  	
+    54 0000004A E817000000              	call contar
+    55                                  
+    56 0000004F 48B9-                   	mov rcx,m2
+    56 00000051 [3900000000000000] 
+    57 00000059 4889C2                  	mov rdx,rax
+    58 0000005C E8(00000000)            	call printf
+    59                                  
+    60 00000061 4883C420                add rsp,0x20
+    61                                  	
+    62                                  	
+    63 00000065 C3                      ret
+    64                                  ;----------------------------------------
+    65                                  ;..........subrutinas....................
+    66                                  	
+    67                                  contar:
+    68                                  		
+    69 00000066 4989CC                  		mov r12,rcx ; direccion cad
+    70 00000069 4831C9                  		xor rcx,rcx
+    71 0000006C 4831C0                  		xor rax,rax
+    72 0000006F 4831DB                  		xor rbx,rbx
+    73 00000072 4889D1                  		mov rcx,rdx ;contador loop strlen
+    74 00000075 41BD00000000            		mov r13,0 ; contador dig,may,min
+    75                                  	
+    76                                  			ciclo:
+    77                                  				
+    78 0000007B 418A1C24                				mov bl,[r12]
+    79 0000007F 80FB30                  				cmp bl,48
+    80 00000082 721E                    				jb noContar
+    81 00000084 80FB39                  				cmp bl,57
+    82 00000087 7616                    				jbe siContar
+    83 00000089 80FB41                  				cmp bl,65
+    84 0000008C 7214                    				jb noContar
+    85 0000008E 80FB5A                  				cmp bl,90
+    86 00000091 760C                    				jbe siContar
+    87 00000093 80FB61                  				cmp bl,97
+    88 00000096 720A                    				jb noContar
+    89 00000098 80FB7A                  				cmp bl,122
+    90 0000009B 7602                    				jbe siContar
+    91 0000009D EB03                    				jmp noContar
+    92                                  				
+    93                                  					siContar:
+    94 0000009F 49FFC5                  						inc r13
+    95                                  					noContar:
+    96 000000A2 49FFC4                  						inc r12
+    97                                  							
+    98 000000A5 E2D4                    			loop ciclo
+    99                                  	
+   100 000000A7 4C89E8                  		mov rax,r13
+   101 000000AA C3                      ret

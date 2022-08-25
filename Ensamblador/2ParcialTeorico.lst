@@ -1,0 +1,45 @@
+     1                                  
+     2                                  segment .data
+     3                                  
+     4 00000000 F7A55404583374          	datos	 DB	 -9, 0xA5, 'T', 4, "X3t"
+     5                                  
+     6                                  segment .bss
+     7                                  
+     8                                  
+     9                                  
+    10                                  segment .text
+    11                                  global main
+    12                                  main:
+    13                                  
+    14 00000000 BE[06000000]            	MOV ESI, datos+6
+    15 00000005 678A4416FD                  MOV AL, [ESI+EDX*1-3]
+    16 0000000A 6AFB                        PUSH -5
+    17 0000000C 340C                        XOR AL, 0x0C
+    18 0000000E 50                          PUSH RAX		
+    19 0000000F E80E000000                  CALL EE1
+    20 00000014 678B0C24                    MOV ECX, [ESP]		
+    21 00000018 67884416FD                  MOV [ESI+EDX*1-3], AL
+    22 0000001D 90                          NOP		;-->> 2da. NO OPERACION
+    23 0000001E 83C408                      ADD ESP, 8
+    24 00000021 C3                          RET
+    25                                      ;--------------------------
+    26 00000022 55                          EE1:	PUSH RBP
+    27 00000023 89E5                        MOV EBP, ESP	
+    28 00000025 E80E000000                  CALL EE2
+    29 0000002A 678B5D08                    MOV EBX, [EBP+8]		
+    30 0000002E C1EB02                      SHR EBX, 2				
+    31 00000031 670FAF450C                  IMUL EAX, [EBP+12]		
+    32 00000036 5D                          POP RBP
+    33 00000037 C3                          RET
+    34                                      ;--------------------------
+    35 00000038 55                          EE2:	PUSH RBP
+    36 00000039 89E5                        MOV EBP, ESP
+    37 0000003B 83EC08                      SUB ESP, 8
+    38 0000003E 67C745FC05000000            MOV dword [EBP-4], 5
+    39 00000046 678B45FC                    MOV EAX, [EBP-4]	
+    40 0000004A C1E002                      SHL EAX, 2 				
+    41 0000004D 678945F8                    MOV [EBP-8], EAX		
+    42 00000051 90                          NOP		;-->> 1ra. NO OPERACION
+    43 00000052 89EC                        MOV ESP, EBP
+    44 00000054 5D                          POP RBP
+    45 00000055 C3                          RET	

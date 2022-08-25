@@ -1,0 +1,57 @@
+     1                                  
+     2                                  global main
+     3                                  extern printf, scanf
+     4                                  
+     5                                  segment .data
+     6                                  
+     7 00000000 0A496E677265736172-     	msj1	db 		10, "Ingresar un número entero (decimal): ", 0
+     7 00000009 20756E206EC3BA6D65-
+     7 00000012 726F20656E7465726F-
+     7 0000001B 2028646563696D616C-
+     7 00000024 293A2000           
+     8 00000028 456C206EC3BA6D6572-     	msj2	db		"El número ingresado es: %lld", 10, 0
+     8 00000031 6F20696E6772657361-
+     8 0000003A 646F2065733A20256C-
+     8 00000043 6C640A00           
+     9 00000047 256400                  	fmt		db		"%d", 0
+    10                                  
+    11                                  segment .bss
+    12                                  
+    13 00000000 ????????????????        	numero  resq   1
+    14                                  
+    15                                  segment .text
+    16                                  main:
+    17                                  
+    18 00000000 4883EC20                sub rsp, 0x20
+    19                                  
+    20 00000004 48B9-                   	mov rcx, msj1
+    20 00000006 [0000000000000000] 
+    21 0000000E E8(00000000)            	call printf
+    22                                  
+    23 00000013 48B9-                   	mov rcx, fmt		; por referencia
+    23 00000015 [4700000000000000] 
+    24 0000001D 48BA-                   	mov rdx, numero		; por referencia
+    24 0000001F [0000000000000000] 
+    25 00000027 E8(00000000)            	call scanf
+    26                                  	
+    27 0000002C 48B9-                   	mov rcx, msj2
+    27 0000002E [2800000000000000] 
+    28 00000036 488B1425[00000000]      	mov rdx, [numero]
+    29 0000003E E8(00000000)            	call printf
+    30                                  
+    31 00000043 4883C420                add rsp, 0x20
+    32                                  
+    33 00000047 C3                      ret
+    34                                  
+    35                                  
+    36                                  
+    37                                  
+    38                                  
+    39                                  
+    40                                  
+    41                                  
+    42                                  
+    43                                  
+    44                                  
+    45                                  
+    46                                  

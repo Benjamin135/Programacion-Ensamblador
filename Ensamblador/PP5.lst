@@ -1,0 +1,54 @@
+     1                                  
+     2                                  segment .data
+     3                                  
+     4 00000000 0102030500              	arreglo    db	1, 2, 3, 5, 0
+     5                                  
+     6                                  segment .bss
+     7                                  
+     8 00000000 ??                      	paridad    resb	 1
+     9                                  
+    10                                  segment .text
+    11                                  global main
+    12                                  main:
+    13                                  
+    14 00000000 4831DB                  	xor rbx, rbx		; base
+    15 00000003 4831F6                  	xor rsi, rsi 		; indice
+    16 00000006 4831C0                  	xor rax, rax		; acumulador
+    17 00000009 4831D2                  	xor rdx, rdx
+    18                                  	
+    19 0000000C 48BB-                   	mov rbx, arreglo
+    19 0000000E [0000000000000000] 
+    20                                  	
+    21                                  	ciclo: 
+    22 00000016 8A1433                  		mov dl, [rbx, rsi]
+    23 00000019 B908000000              		mov rcx, 8	
+    24                                  		
+    25                                  		subCiclo: 
+    26 0000001E 4188D4                  			mov r12b, dl
+    27 00000021 4180E401                			and r12b, 1
+    28 00000025 4400E0                  			add al, r12b
+    29 00000028 D0CA                    			ror dl, 1
+    30                                  			
+    31 0000002A E2F2                    		loop subCiclo
+    32 0000002C 48FFC6                  		inc rsi
+    33                                  		
+    34 0000002F 80FA00                  	cmp dl, 0
+    35 00000032 75E2                    	jnz ciclo
+    36                                  	
+    37 00000034 D0E8                    	shr al, 1
+    38 00000036 7202                    	jc esImpar
+    39 00000038 EB0A                    	jmp esPar
+    40                                  	
+    41                                  	esImpar:
+    42 0000003A C60425[00000000]00      	mov byte[paridad], 0
+    43 00000042 EB08                    	jmp fin
+    44                                  	
+    45                                  	esPar:
+    46 00000044 C60425[00000000]01      	mov byte[paridad], 1
+    47                                  	
+    48                                  	fin:
+    49                                  
+    50 0000004C C3                      ret
+    51                                  
+    52                                  
+    53                                  

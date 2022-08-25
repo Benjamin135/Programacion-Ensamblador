@@ -1,0 +1,142 @@
+     1                                  ;--------------------------------------------------------------------------
+     2                                  ; MODELO EXAMEN FINAL N° 1
+     3                                  ;--------------------------------------------------------------------------
+     4                                  ;Escribir un programa el cual permita ingresar una cadena de caracteres por teclado (puede
+     5                                  ;contener letras mayúsculas y/o minúsculas, dígitos, caracteres especiales, espacios), con una
+     6                                  ;longitud máxima de 100 (cien) caracteres. El programa deberá contar el número total de
+     7                                  ;“letras mayúsculas y minúsculas” y los “dígitos numéricos” que se encuentran en la cadena
+     8                                  ;introducida (no se debe contar los caracteres especiales). A tal fin el programa principal llamará
+     9                                  ;a una “subrutina” de nombre “Contar” la cual realizará dicho conteo. Los parámetros a la
+    10                                  ;subrutina se pasarán en el siguiente orden respectando las Convenciones de Llamada de
+    11                                  ;Microsoft x64 ABI (Application Binary Interface):
+    12                                  ;--------------------------------------------------------------------------
+    13                                  ; nasm -f win64 -o final1.o final1.asm -l final1.lst
+    14                                  ; gcc -o final1 final1.o
+    15                                  ;--------------------------------------------------------------------------
+    16                                  
+    17                                  global main
+    18                                  extern printf, scanf, gets, strlen
+    19                                  
+    20                                  segment .data
+    21                                  
+    22 00000000 0A496E677265736172-     	m1	db	10, "Ingresar la cadena de caracteres (máx 100 caracteres): ", 0
+    22 00000009 206C6120636164656E-
+    22 00000012 612064652063617261-
+    22 0000001B 63746572657320286D-
+    22 00000024 C3A178203130302063-
+    22 0000002D 617261637465726573-
+    22 00000036 293A2000           
+    23 0000003A 0A4C6120636164656E-     	m2	db  10, "La cadena tiene un total de: %d (digítos + letras mayúsculas + minúsculas)", 10, 0
+    23 00000043 61207469656E652075-
+    23 0000004C 6E20746F74616C2064-
+    23 00000055 653A20256420286469-
+    23 0000005E 67C3AD746F73202B20-
+    23 00000067 6C6574726173206D61-
+    23 00000070 79C3BA7363756C6173-
+    23 00000079 202B206D696EC3BA73-
+    23 00000082 63756C6173290A00   
+    24                                  
+    25                                  ;	m3	db	10, "La cadena ingresada es: %s", 10, 0
+    26                                  ;	fmt	db  "%s", 0
+    27                                  
+    28                                  segment .bss
+    29                                  
+    30 00000000 <res 64h>               	cadena	resb   100
+    31                                  
+    32                                  segment .text
+    33                                  main:
+    34                                  
+    35 00000000 4883EC20                sub rsp, 0x20
+    36                                  
+    37                                  ; ------ PRINTF ------		// Muestra el mensaje m1
+    38 00000004 48B9-                   	mov rcx, m1
+    38 00000006 [0000000000000000] 
+    39 0000000E E8(00000000)            	call printf
+    40                                  	
+    41                                  ; ------ SCANF ------		// Escanea la cadena solo hasta el primer espacio
+    42                                  ;	mov rcx, fmt
+    43                                  ;	mov rdx, cadena
+    44                                  ;	call scanf
+    45                                  
+    46                                  ; ------ GETS ------		// Escanea todo la cadena 
+    47 00000013 48B9-                   	mov rcx, cadena
+    47 00000015 [0000000000000000] 
+    48 0000001D E8(00000000)            	call gets
+    49                                  	
+    50                                  ; ------ STRLEN ------		// Devuelve la longitud de la cadena en RAX
+    51 00000022 48B9-                   	mov rcx, cadena
+    51 00000024 [0000000000000000] 
+    52 0000002C E8(00000000)            	call strlen
+    53                                  	
+    54                                  ; ------ SUBRUTINA ------	// Llama a la subrutina Contar
+    55 00000031 48B9-                   	mov rcx, cadena
+    55 00000033 [0000000000000000] 
+    56 0000003B 4889C2                  	mov rdx, rax
+    57 0000003E E817000000              	call Contar
+    58                                  	
+    59                                  ; ------ PRINTF ------		// Mustra el mensaje m3 y la cadena escaneada
+    60                                  ;	mov rcx, m3
+    61                                  ;	mov rdx, cadena
+    62                                  ;	call printf
+    63                                  
+    64                                  ; ------ PRINTF ------
+    65 00000043 48B9-                   	mov rcx, m2
+    65 00000045 [3A00000000000000] 
+    66 0000004D 4889C2                  	mov rdx, rax
+    67 00000050 E8(00000000)            	call printf
+    68                                  
+    69 00000055 4883C420                add rsp, 0x20
+    70                                  
+    71 00000059 C3                      ret
+    72                                  
+    73                                  ;---------------------------------------------------------------------------
+    74                                  ;............Subrutinas............
+    75                                  ;---------------------------------------------------------------------------
+    76                                  
+    77                                  Contar:
+    78                                  
+    79 0000005A 4889CB                  	mov rbx, rcx		; direccion de la cadena en RBX
+    80 0000005D 4889D1                  	mov rcx, rdx		; iterador
+    81                                  	
+    82 00000060 4831C0                  	xor rax, rax
+    83 00000063 4D31E4                  	xor r12, r12		; acumulador de la suma
+    84                                  	
+    85                                  	ciclo:
+    86                                  	
+    87 00000066 8A03                    		mov al, [rbx]
+    88 00000068 3C30                    		cmp al, 0x30
+    89 0000006A 7C04                    		jl verificarMayuscula
+    90 0000006C 3C39                    		cmp al, 0x39
+    91 0000006E 7E12                    		jle contar
+    92                                  		
+    93                                  		verificarMayuscula:
+    94 00000070 3C41                    		cmp al, 0x41
+    95 00000072 7C04                    		jl verificarMinuscula
+    96 00000074 3C5A                    		cmp al, 0x5A
+    97 00000076 7E0A                    		jle contar
+    98                                  		
+    99                                  		verificarMinuscula:
+   100 00000078 3C61                    		cmp al, 0x61
+   101 0000007A 7C09                    		jl siguiente
+   102 0000007C 3C7A                    		cmp al, 0x7A
+   103 0000007E 7E02                    		jle contar
+   104 00000080 EB03                    		jmp siguiente
+   105                                  		
+   106                                  		contar:
+   107 00000082 49FFC4                  			inc r12
+   108                                  			
+   109                                  		siguiente:
+   110 00000085 48FFC3                  			inc rbx
+   111                                  	
+   112 00000088 E2DC                    	loop ciclo
+   113                                  	
+   114 0000008A 4C89E0                  	mov rax, r12
+   115                                  
+   116 0000008D C3                      ret
+   117                                  
+   118                                  
+   119                                  
+   120                                  
+   121                                  
+   122                                  
+   123                                  

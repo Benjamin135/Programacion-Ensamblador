@@ -1,0 +1,58 @@
+     1                                  ;------------------------------------------------------
+     2                                  ;assemble: -->> nasm -f win64 -o Ensamblador.o Ensamblador.asm -l Ensamblador.lst
+     3                                  ;link:	   -->> gcc -o Ensamblador Ensamblador.o
+     4                                  ;-----------------------------------------
+     5                                  
+     6                                  ;file: Ensamblador.asm (nombre programa)
+     7                                  ;registro
+     8                                  ;nombres y apellidos
+     9                                  
+    10                                  extern printf, scanf
+    11                                  
+    12                                  segment .data
+    13                                  ;aqui se declaran las variables inicializadas
+    14                                  
+    15 00000000 B78B8700                	a 	dd		8883127
+    16 00000004 F6FFFFFF                	b 	dd		-10
+    17 00000008 E7F21C0D                	c 	dd		220000999
+    18                                  
+    19                                  segment .bss
+    20                                  ;aqui se declaran las variables sin inicializar
+    21                                  
+    22 00000000 ????????                	x 	resd 	1
+    23                                  
+    24                                  segment .text
+    25                                  
+    26                                  global main:
+    27                                  main:
+    28                                  ;aqui van las instrucciones
+    29                                  
+    30 00000000 4831C0                  	xor rax, rax
+    31 00000003 4831DB                  	xor rbx, rbx
+    32 00000006 4831C9                  	xor rcx, rcx
+    33 00000009 4831D2                  	xor rdx, rdx
+    34                                  	
+    35 0000000C 8B0425[00000000]        	mov eax, [a]		; eax = a = 8883127
+    36 00000013 8B1C25[04000000]        	mov ebx, [b]		; ebx = b = -10
+    37 0000001A 8B0C25[08000000]        	mov ecx, [c]		; ecx = c = 220000999
+    38                                  	
+    39 00000021 BA28000000              	mov edx, 40			; edx = 40
+    40                                  	
+    41 00000026 29C2                    	sub edx, eax		; edx = 40 - a
+    42 00000028 F7DB                    	neg ebx				; ebx = (-(-10)) = 10 
+    43 0000002A 29DA                    	sub edx, ebx		; edx = (40-a) - (-b)
+    44 0000002C 891425[00000000]        	mov [x], edx		; x = edx = (40-a) - (-b)
+    45                                  	
+    46 00000033 83C20A                  	add edx, 10			; edx = x + 10
+    47 00000036 83C114                  	add ecx, 20			; ecx = c + 20
+    48 00000039 01CA                    	add edx, ecx		; edx = (x+10) + (c+20)
+    49                                  	
+    50 0000003B FFC2                    	inc edx				; x++
+    51 0000003D 891425[00000000]        	mov [x], edx		; x = edx
+    52                                  
+    53                                  
+    54 00000044 C3                      ret
+    55                                  	
+    56                                  	
+    57                                  	
+    58                                  	

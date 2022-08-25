@@ -1,0 +1,129 @@
+     1                                  ;--------------------------------------------------------------------------
+     2                                  ; MODELO EXAMEN FINAL N° 6
+     3                                  ;--------------------------------------------------------------------------
+     4                                  ; Verificar si una cadena introducida es un correo
+     5                                  ;--------------------------------------------------------------------------
+     6                                  
+     7                                  global main
+     8                                  extern printf, scanf, gets, strlen
+     9                                  
+    10                                  segment .data
+    11                                  
+    12 00000000 0A496E74726F64757A-     	m1   db   10, "Introduzca la cadena a analizar: ", 0
+    12 00000009 6361206C6120636164-
+    12 00000012 656E61206120616E61-
+    12 0000001B 6C697A61723A2000   
+    13 00000023 0A4C6120636164656E-     	m2   db   10, "La cadena introducida NO es un correo", 10, 0
+    13 0000002C 6120696E74726F6475-
+    13 00000035 63696461204E4F2065-
+    13 0000003E 7320756E20636F7272-
+    13 00000047 656F0A00           
+    14 0000004B 0A4C6120636164656E-     	m3   db   10, "La cadena introducida es un correo", 10, 0
+    14 00000054 6120696E74726F6475-
+    14 0000005D 636964612065732075-
+    14 00000066 6E20636F7272656F0A-
+    14 0000006F 00                 
+    15 00000070 257300                  	fmt  db   "%s", 0
+    16                                  
+    17                                  segment .bss
+    18                                  
+    19 00000000 <res 64h>               	cadena  resb  100
+    20                                  
+    21                                  segment .text
+    22                                  main:
+    23                                  
+    24 00000000 4883EC20                sub rsp, 0x20
+    25                                  
+    26 00000004 48B9-                   	mov rcx, m1
+    26 00000006 [0000000000000000] 
+    27 0000000E E8(00000000)            	call printf
+    28                                  	
+    29 00000013 48B9-                   	mov rcx, cadena
+    29 00000015 [0000000000000000] 
+    30 0000001D E8(00000000)            	call gets
+    31                                  	
+    32 00000022 48B9-                   	mov rcx, cadena
+    32 00000024 [0000000000000000] 
+    33 0000002C E8(00000000)            	call strlen
+    34                                  	
+    35 00000031 48B9-                   	mov rcx, cadena
+    35 00000033 [0000000000000000] 
+    36 0000003B 4889C2                  	mov rdx, rax
+    37 0000003E E82D000000              	call detectorCorreo
+    38                                  	
+    39 00000043 4883F800                	cmp rax, 0
+    40 00000047 7402                    	je noEsCorreo
+    41 00000049 EB11                    	jmp siEsCorreo
+    42                                  	
+    43                                  	noEsCorreo:
+    44 0000004B 48B9-                   	mov rcx, m2
+    44 0000004D [2300000000000000] 
+    45 00000055 E8(00000000)            	call printf
+    46 0000005A EB0F                    	jmp fin
+    47                                  	
+    48                                  	siEsCorreo:
+    49 0000005C 48B9-                   	mov rcx, m3
+    49 0000005E [4B00000000000000] 
+    50 00000066 E8(00000000)            	call printf
+    51                                  	
+    52                                  	fin:
+    53                                  
+    54 0000006B 4883C420                add rsp, 0x20
+    55                                  
+    56 0000006F C3                      ret
+    57                                  
+    58                                  ;---------------------------------------------------------------------------
+    59                                  ;............Subrutinas............
+    60                                  ;---------------------------------------------------------------------------
+    61                                  
+    62                                  detectorCorreo:
+    63                                  
+    64 00000070 4889CB                  	mov rbx, rcx
+    65 00000073 4889D1                  	mov rcx, rdx
+    66                                  	
+    67 00000076 4831C0                  	xor rax, rax
+    68 00000079 4D31D2                  	xor r10, r10
+    69 0000007C 4D31DB                  	xor r11, r11
+    70                                  
+    71                                  	ciclo:
+    72                                  	
+    73 0000007F 8A03                    		mov al, [rbx]
+    74 00000081 3C40                    		cmp al, 0x40		; comparar primero el arroba
+    75 00000083 7406                    		je encontroArroba
+    76 00000085 3C2E                    		cmp al, 0x2E
+    77 00000087 740A                    		je encontroPunto
+    78 00000089 EB16                    		jmp continuar
+    79                                  		
+    80                                  		encontroArroba:
+    81 0000008B 41BA01000000            			mov r10, 1
+    82 00000091 EB0E                    			jmp continuar
+    83                                  			
+    84                                  		encontroPunto:
+    85 00000093 4983FA01                			cmp r10, 1
+    86 00000097 7402                    			je siEncontroArroba
+    87 00000099 EB06                    			jmp continuar
+    88                                  		
+    89                                  		siEncontroArroba:
+    90 0000009B 41BB01000000            			mov r11, 1
+    91                                  		
+    92                                  		continuar:
+    93 000000A1 48FFC3                  		inc rbx
+    94                                  	
+    95 000000A4 E2D9                    	loop ciclo
+    96                                  
+    97 000000A6 4D39DA                  cmp r10, r11
+    98 000000A9 7507                    jne NoEsCorreo
+    99 000000AB B801000000              mov rax, 1
+   100 000000B0 EB05                    jmp final
+   101                                  
+   102                                  NoEsCorreo:
+   103 000000B2 B800000000              mov rax, 0
+   104                                  
+   105                                  final:
+   106                                  
+   107 000000B7 C3                      ret
+   108                                  
+   109                                  
+   110                                  
+   111                                  
+   112                                  

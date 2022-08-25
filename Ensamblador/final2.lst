@@ -1,0 +1,122 @@
+     1                                  ;--------------------------------------------------------------------------
+     2                                  ; MODELO EXAMEN FINAL N° 2
+     3                                  ;--------------------------------------------------------------------------
+     4                                  
+     5                                  global main
+     6                                  extern printf, scanf, gets, strlen
+     7                                  
+     8                                  segment .data
+     9                                  
+    10 00000000 0A496E677265736172-     	m1	db  10, "Ingresar cantidad de segundos a convertir: ", 0
+    10 00000009 2063616E7469646164-
+    10 00000012 20646520736567756E-
+    10 0000001B 646F73206120636F6E-
+    10 00000024 7665727469723A2000 
+    11 0000002D 0A5469656D706F3A20-     	m2  db  10, "Tiempo: %d horas, %d minutos, %d segundos", 10, 0
+    11 00000036 256420686F7261732C-
+    11 0000003F 202564206D696E7574-
+    11 00000048 6F732C202564207365-
+    11 00000051 67756E646F730A00   
+    12 00000059 256400                  	fmt db  "%d", 0
+    13                                  
+    14                                  segment .bss
+    15                                  
+    16 00000000 ????????                	nroSegundos  resd  1
+    17 00000004 ????????                	horas	 resd  1
+    18 00000008 ????????                	minutos  resd  1
+    19 0000000C ????????                	segundos resd  1
+    20                                  
+    21                                  segment .text
+    22                                  main:
+    23                                  	
+    24 00000000 4883EC20                sub rsp, 0x20
+    25                                  
+    26 00000004 48B9-                   	mov rcx, m1
+    26 00000006 [0000000000000000] 
+    27 0000000E E8(00000000)            	call printf
+    28                                  	
+    29 00000013 48B9-                   	mov rcx, fmt
+    29 00000015 [5900000000000000] 
+    30 0000001D 48BA-                   	mov rdx, nroSegundos
+    30 0000001F [0000000000000000] 
+    31 00000027 E8(00000000)            	call scanf
+    32                                  	
+    33 0000002C 4831C9                  	xor rcx, rcx
+    34 0000002F 8B0C25[00000000]        	mov ecx, [nroSegundos]
+    35 00000036 48BA-                   	mov rdx, horas
+    35 00000038 [0400000000000000] 
+    36 00000040 49B8-                   	mov r8, minutos
+    36 00000042 [0800000000000000] 
+    37 0000004A 49B9-                   	mov r9, segundos
+    37 0000004C [0C00000000000000] 
+    38 00000054 E82C000000              	call convertir
+    39                                  	
+    40 00000059 48B9-                   	mov rcx, m2
+    40 0000005B [2D00000000000000] 
+    41 00000063 488B1425[04000000]      	mov rdx, [horas]
+    42 0000006B 4C8B0425[08000000]      	mov r8, [minutos]
+    43 00000073 4C8B0C25[0C000000]      	mov r9, [segundos]
+    44 0000007B E8(00000000)            	call printf
+    45                                  
+    46 00000080 4883C420                add rsp, 0x20
+    47                                  
+    48 00000084 C3                      ret
+    49                                  
+    50                                  ;---------------------------------------------------------------------------
+    51                                  ;............Subrutinas............
+    52                                  ;---------------------------------------------------------------------------
+    53                                  
+    54                                  convertir:
+    55                                  
+    56                                  ;   shadow space
+    57                                  ;	mov [rsp+8], rcx
+    58                                  ;	mov [rsp+16], rdx		; horas
+    59                                  ;	mov [rsp+24], r8		; minutos
+    60                                  ;	mov [rsp+32], r9		; segundos
+    61                                  
+    62 00000085 4831C0                  	xor rax, rax
+    63 00000088 4831DB                  	xor rbx, rbx
+    64 0000008B 4D31D2                  	xor r10, r10
+    65                                  	
+    66 0000008E 4889D3                  	mov rbx, rdx	; direccion de horas
+    67                                  
+    68 00000091 89C8                    	mov eax, ecx
+    69 00000093 99                      	cdq
+    70 00000094 41BA100E0000            	mov r10d, 3600
+    71 0000009A 41F7FA                  	idiv r10d
+    72                                  	
+    73                                  	; las horas transformadas estan en eax
+    74                                  	; los segundos sobrantes estan en edx
+    75                                  	
+    76                                  ;	mov r10, [rsp+16]
+    77                                  ;	mov [r10], eax
+    78                                  
+    79 0000009D 8903                    	mov [rbx], eax  ; pasamos el valor de eax a la variable horas
+    80                                  
+    81 0000009F 89D0                    	mov eax, edx	; movemos segundos sobrantes
+    82 000000A1 99                      	cdq
+    83 000000A2 41BA3C000000            	mov r10d, 60
+    84 000000A8 41F7FA                  	idiv r10d
+    85                                  	
+    86                                  	; las minutos transformadas estan en eax
+    87                                  	; los segundos sobrantes estan en edx
+    88                                  	
+    89 000000AB 418900                  	mov [r8], eax	; pasamos el valor de eax a la variable minutos
+    90 000000AE 418911                  	mov [r9], edx	; pasamos el valor de eax a la variable segundos
+    91                                  
+    92 000000B1 C3                      ret
+    93                                  	
+    94                                  
+    95                                  
+    96                                  
+    97                                  
+    98                                  
+    99                                  
+   100                                  
+   101                                  
+   102                                  
+   103                                  
+   104                                  
+   105                                  
+   106                                  
+   107                                  

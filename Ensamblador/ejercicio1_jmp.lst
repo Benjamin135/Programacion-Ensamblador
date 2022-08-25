@@ -1,0 +1,49 @@
+     1                                  ;---------------------------------------------------------------------------------------------------
+     2                                  ; De la resta de (a-b) donde estas variables son de 32 bits realizar la siguiente operacion 
+     3                                  ; si el resultado es menor a 20
+     4                                  ;	c = a + b;			y sino 
+     5                                  ;	c = a - b;
+     6                                  ; donde a = 200 y b = 215
+     7                                  ;---------------------------------------------------------------------------------------------------
+     8                                  
+     9                                  segment .data
+    10                                  
+    11 00000000 C8000000                	a	dd	200
+    12 00000004 D7000000                	b	dd	215
+    13                                  
+    14                                  segment .bss
+    15                                  
+    16 00000000 ????????                	c	resd	1
+    17                                  
+    18                                  segment .text 
+    19                                  global main
+    20                                  main:
+    21                                  
+    22 00000000 4831C0                  	xor rax, rax
+    23 00000003 4831DB                  	xor rbx, rbx
+    24 00000006 4831C9                  	xor rcx, rcx
+    25                                  	
+    26 00000009 8B0425[00000000]        	mov eax, [a]
+    27 00000010 8B1C25[04000000]        	mov ebx, [b]
+    28 00000017 29D8                    	sub eax, ebx
+    29                                  	
+    30 00000019 83F814                  	cmp eax, 20
+    31 0000001C 7C02                    	jl  sumar
+    32 0000001E EB12                    	jmp restar
+    33                                  	
+    34                                  	sumar:
+    35 00000020 8B0C25[00000000]        		mov ecx, [a]
+    36 00000027 01D9                    		add ecx, ebx
+    37 00000029 890C25[00000000]        		mov [c], ecx
+    38                                  		
+    39 00000030 EB10                    	jmp final
+    40                                  		
+    41                                  	restar:
+    42 00000032 8B0C25[00000000]        		mov ecx, [a]
+    43 00000039 29D9                    		sub ecx, ebx
+    44 0000003B 890C25[00000000]        		mov [c], ecx 
+    45                                  		
+    46                                  	final:
+    47                                  	
+    48 00000042 C3                      	ret 
+    49                                  

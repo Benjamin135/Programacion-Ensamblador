@@ -1,0 +1,51 @@
+     1                                  
+     2                                  segment .data
+     3                                  
+     4 00000000 0A001400E2FF2800E2-     	arreglo1  dw  10, 20, -30, 40, -30, 60, 70, 80, -30, -32768
+     4 00000009 FF3C0046005000E2FF-
+     4 00000012 0080               
+     5 00000014 0A00                    	n 		  dw  10
+     6 00000016 E2FF                    	eliminar  dw  -30
+     7                                  
+     8                                  segment .bss
+     9                                  
+    10 00000000 <res 64h>               	arreglo2  resw 50
+    11                                  
+    12                                  segment .text
+    13                                  global main
+    14                                  main:
+    15                                  
+    16 00000000 48B9-                   	mov rcx, arreglo1
+    16 00000002 [0000000000000000] 
+    17 0000000A 48BA-                   	mov rdx, arreglo2
+    17 0000000C [0000000000000000] 
+    18 00000014 66448B0425-             	mov r8w, [eliminar]
+    18 00000019 [16000000]         
+    19 0000001D 66448B0C25-             	mov r9w, [n]
+    19 00000022 [14000000]         
+    20 00000026 E801000000              	call eliminar1
+    21                                  
+    22 0000002B C3                      ret
+    23                                  
+    24                                  eliminar1:
+    25                                  
+    26 0000002C 668B01                  ciclo:	mov ax, [rcx]
+    27 0000002F 664439C0                		cmp ax, r8w
+    28 00000033 7505                    		jne no_igual
+    29                                  
+    30                                  igual:
+    31 00000035 668902                  		mov [rdx], ax
+    32 00000038 EB07                    		jmp LL2
+    33                                  	
+    34                                  no_igual:
+    35 0000003A 668902                  		mov [rdx], ax
+    36 0000003D 4883C202                		add rdx, 2
+    37 00000041 4883C102                LL2:	add rcx, 2
+    38 00000045 6641FFC9                		dec r9w
+    39 00000049 75E1                    		jnz ciclo
+    40 0000004B C3                      		ret
+    41                                  
+    42                                  
+    43                                  
+    44                                  
+    45                                  

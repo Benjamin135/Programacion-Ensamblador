@@ -1,0 +1,53 @@
+     1                                  ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     2                                  ; Nombre y Apellido: Benjamin Condori Vasquez
+     3                                  ; Resgistro: 220000999
+     4                                  ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     5                                  
+     6                                  segment .data
+     7                                  ; Aqui se declaran las variables inicializadas
+     8                                  
+     9 00000000 B78B8700                	a 	dd		8883127
+    10 00000004 C0B4B3FF                	b	dd		-5000000
+    11 00000008 E7F21C0D                	c 	dd 		220000999
+    12 0000000C BADCFE00                	d 	dd 		0xFEDCBA 	; 16702650 
+    13 00000010 80D1F008                	e	dd		150000000
+    14                                  
+    15                                  segment .bss
+    16                                  ; Aqui se declaran las variables sin inicializar
+    17                                  
+    18 00000000 ????????                	x 	resd	1
+    19                                  
+    20                                  segment .text
+    21                                  global main
+    22                                  main:
+    23                                  ; Aqui van las instrucciones
+    24                                  
+    25                                  	; x = (e << 4) - (d >> 3) ^ (~c | (a & b));
+    26                                  	
+    27 00000000 4831C0                  	xor rax, rax	; limpiando registros
+    28 00000003 4831DB                  	xor rbx, rbx
+    29 00000006 4831C9                  	xor rcx, rcx
+    30 00000009 4831D2                  	xor rdx, rdx
+    31 0000000C 4831F6                  	xor rsi, rsi
+    32                                  	
+    33 0000000F 8B0425[00000000]        	mov eax, [a]
+    34 00000016 8B1C25[04000000]        	mov ebx, [b]
+    35 0000001D 8B0C25[08000000]        	mov ecx, [c]
+    36 00000024 8B1425[0C000000]        	mov edx, [d]
+    37 0000002B 8B3425[10000000]        	mov esi, [e]
+    38                                  	
+    39 00000032 21D8                    	and eax, ebx	; (a & b)
+    40 00000034 F7D1                    	not ecx			; ~c
+    41 00000036 09C1                    	or  ecx, eax	; (~c | (a & b)
+    42                                  	
+    43 00000038 C1E604                  	sal esi, 4		; (e << 4)
+    44 0000003B C1FA03                  	sar edx, 3		; (d >> 3)
+    45 0000003E 29D6                    	sub esi, edx	; (e << 4) - (d >> 3)
+    46                                  	
+    47 00000040 31CE                    	xor esi, ecx	; (e << 4) - (d >> 3) ^ (~c | (a & b))
+    48                                  	
+    49 00000042 893425[00000000]        	mov [x], esi
+    50                                  
+    51                                  
+    52 00000049 C3                      ret
+    53                                  

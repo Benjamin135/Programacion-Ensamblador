@@ -1,0 +1,56 @@
+     1                                  
+     2                                  segment .data
+     3                                  
+     4 00000000 7F040000E7F21C0D3F-     	a	dd	1151, 220000999, 319, -2200, 20764, 8883127, -609, 19, 11990, -55
+     4 00000009 01000068F7FFFF1C51-
+     4 00000012 0000B78B87009FFDFF-
+     4 0000001B FF13000000D62E0000-
+     4 00000024 C9FFFFFF           
+     5                                  
+     6                                  segment .bss
+     7                                  
+     8 00000000 ????????                	promedio resd	1
+     9                                  
+    10                                  segment .text
+    11                                  global main
+    12                                  main:
+    13                                  
+    14 00000000 4831C0                  	xor rax, rax
+    15 00000003 4831C9                  	xor rcx, rcx		
+    16 00000006 4831F6                  	xor rsi, rsi		; indice
+    17 00000009 4831DB                  	xor rbx, rbx		; acumulador de suma
+    18 0000000C 4D31C9                  	xor r9, r9 			; obtiene elemento del vector
+    19                                  	
+    20 0000000F 48B8-                   	mov rax, a
+    20 00000011 [0000000000000000] 
+    21 00000019 B90A000000              	mov rcx, 10
+    22                                  	
+    23                                  	ciclo:
+    24 0000001E 448B0C30                		mov r9d, [rax + rsi]
+    25 00000022 4183F900                		cmp r9d, 0
+    26 00000026 790B                    		jns sumar
+    27                                  			
+    28                                  		sig:
+    29 00000028 4883C604                			add rsi, 4
+    30 0000002C 48FFC9                  			dec rcx
+    31 0000002F 7407                    			jz fin
+    32 00000031 EBEB                    			jmp ciclo
+    33                                  		
+    34                                  		sumar:
+    35 00000033 4401CB                  			add ebx, r9d
+    36 00000036 EBF0                    			jmp sig
+    37                                  	
+    38                                  	fin:
+    39                                  	
+    40 00000038 89D8                    	mov eax, ebx
+    41                                  	
+    42 0000003A 99                      	cdq
+    43 0000003B 41BA0A000000            	mov r10d, 10
+    44 00000041 41F7FA                  	idiv r10d
+    45                                  	
+    46 00000044 890425[00000000]        	mov [promedio], eax
+    47                                  	
+    48 0000004B C3                      	ret
+    49                                  
+    50                                  
+    51                                  

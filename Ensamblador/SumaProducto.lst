@@ -1,0 +1,55 @@
+     1                                  
+     2                                  segment .data
+     3                                  
+     4 00000000 4B000000                	a  dd   75
+     5 00000004 7D000000                	b  dd   125
+     6                                  
+     7                                  segment .bss
+     8                                  
+     9 00000000 ????????                	suma  resd  1
+    10 00000004 ????????                	prod  resd  1
+    11                                  
+    12                                  segment .text
+    13                                  global main
+    14                                  main:
+    15                                  
+    16 00000000 8B0C25[00000000]        	mov ecx, [a]		; 1er argumento por "valor"
+    17 00000007 8B1425[04000000]        	mov edx, [b]		; 2do argumento por "valor"
+    18 0000000E 49B8-                   	mov r8, suma		; >>>>> "referencia" (64-bits)
+    18 00000010 [0000000000000000] 
+    19 00000018 49B9-                   	mov r9, prod		; >>>>> "referencia" (64-bits)
+    19 0000001A [0400000000000000] 
+    20                                  	
+    21 00000022 E801000000              	call calcular
+    22                                  
+    23 00000027 C3                      ret
+    24                                  
+    25                                  ;---------------------------------------------------------------------------
+    26                                  ;............Subrutinas............
+    27                                  ;---------------------------------------------------------------------------
+    28                                  
+    29                                  calcular:
+    30                                  
+    31 00000028 89C8                    	mov eax, ecx		; eax = a
+    32 0000002A 01D0                    	add eax, edx		; eax = a + b
+    33 0000002C 418900                  	mov [r8], eax		; almacena resultado en "suma"
+    34                                  
+    35 0000002F 0FAFCA                  	imul ecx, edx		; ecx = a * b
+    36 00000032 418909                  	mov [r9], ecx		; almacena resultado en "prod"
+    37                                  
+    38 00000035 C3                      ret
+    39                                  
+    40                                  
+    41                                  
+    42                                  
+    43                                  
+    44                                  
+    45                                  
+    46                                  
+    47                                  
+    48                                  
+    49                                  
+    50                                  
+    51                                  
+    52                                  
+    53                                  

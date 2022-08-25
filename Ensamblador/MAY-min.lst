@@ -1,0 +1,48 @@
+     1                                  
+     2                                  segment .data
+     3                                  
+     4 00000000 42454E4A414D494E20-     	cadena 	db	"BENJAMIN CONDORI", 0
+     4 00000009 434F4E444F524900   
+     5                                  
+     6                                  segment .bss
+     7                                  
+     8 00000000 <res 10h>               	cadena2  resb 16 
+     9                                  
+    10                                  segment .text
+    11                                  global main
+    12                                  main:
+    13                                  
+    14 00000000 48B9-                   	mov rcx, cadena
+    14 00000002 [0000000000000000] 
+    15 0000000A 48BA-                   	mov rdx, cadena2
+    15 0000000C [0000000000000000] 
+    16 00000014 E801000000              	call cambiar
+    17                                  
+    18 00000019 C3                      ret
+    19                                  
+    20                                  ;---------------------------------------------------------------------------
+    21                                  ;............Subrutinas............
+    22                                  ;---------------------------------------------------------------------------
+    23                                  
+    24                                  cambiar:
+    25                                  
+    26 0000001A 8A01                    	ciclo: 	mov al, [rcx]	; indirecto por registro
+    27 0000001C 3C00                    			cmp al, 0
+    28 0000001E 740C                    			je fin
+    29 00000020 0C20                    			or al, 0x20		; mascara 20 -> espacio 0x20 "NO" se afecta
+    30 00000022 8802                    			mov [rdx], al
+    31 00000024 48FFC1                  			inc rcx			; incrementa la direccion
+    32 00000027 48FFC2                  			inc rdx
+    33 0000002A EBEE                    			jmp ciclo		; salta si ZF=0
+    34                                      fin:
+    35                                  	
+    36 0000002C C3                      ret
+    37                                  
+    38                                  
+    39                                  
+    40                                  
+    41                                  
+    42                                  
+    43                                  
+    44                                  
+    45                                  

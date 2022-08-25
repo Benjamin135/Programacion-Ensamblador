@@ -1,0 +1,71 @@
+     1                                  ;------------------------------------------------------------------------------------
+     2                                  ; MODELO EXAMEN SEGUNDO PARCIAL N° 7
+     3                                  ;------------------------------------------------------------------------------------
+     4                                  ; Calcular el promedio de los elementos que sean "positivos mayores de 5 y menores
+     5                                  ; o iguales a 100 y que se encuentren en las posiciones de los indices impares"
+     6                                  ; que existen en un arreglo 
+     7                                  ;------------------------------------------------------------------------------------
+     8                                  
+     9                                  segment .data
+    10                                  
+    11 00000000 F6142DB9040797F01E-     	arreglo  db  -10, 20, 45, -71, 4, 7, -105, 240, 30, 100
+    11 00000009 64                 
+    12 0000000A 0A                      	num      db  10
+    13                                  
+    14                                  segment .bss
+    15                                  
+    16 00000000 ??                      	promedio  resb 1
+    17                                  
+    18                                  segment .text
+    19                                  global main
+    20                                  main:
+    21                                  
+    22 00000000 48B9-                   	mov rcx, arreglo
+    22 00000002 [0000000000000000] 
+    23 0000000A 8A1425[0A000000]        	mov dl, [num]
+    24 00000011 E808000000              	call calPromedio
+    25 00000016 880425[00000000]        	mov [promedio], al
+    26                                  
+    27 0000001D C3                      ret
+    28                                  
+    29                                  ;---------------------------------------------------------------------------
+    30                                  ;............Subrutinas............
+    31                                  ;---------------------------------------------------------------------------
+    32                                  
+    33                                  calPromedio:
+    34                                  
+    35 0000001E 4D31D2                  	xor r10, r10  		; acumulador suma
+    36 00000021 4D31DB                  	xor r11, r11		; indice
+    37                                  	
+    38 00000024 88D0                    	mov al, dl
+    39 00000026 6698                    	cbw
+    40 00000028 B302                    	mov bl, 2
+    41 0000002A F6FB                    	idiv bl
+    42                                  	
+    43                                  	ciclo:
+    44 0000002C 80790100                		cmp byte[rcx+1], 0
+    45 00000030 7E10                    		jle contCiclo
+    46                                  		
+    47 00000032 80790105                		cmp byte[rcx+1], 5
+    48 00000036 7E0A                    		jle contCiclo
+    49                                  		
+    50 00000038 80790164                		cmp byte[rcx+1], 100
+    51 0000003C 7F04                    		jg contCiclo
+    52 0000003E 44025101                		add r10b, byte[rcx+1]
+    53                                  	
+    54                                  		contCiclo:
+    55 00000042 4883C102                		add rcx, 2
+    56 00000046 49FFC3                  		inc r11
+    57 00000049 4138C3                  		cmp r11b, al
+    58                                  	
+    59 0000004C 7CDE                    	jl ciclo
+    60                                  	
+    61 0000004E 4488D0                  	mov al, r10b
+    62 00000051 6698                    	cbw
+    63 00000053 F6FA                    	idiv dl
+    64                                  	
+    65 00000055 C3                      ret
+    66                                  
+    67                                  
+    68                                  
+    69                                  

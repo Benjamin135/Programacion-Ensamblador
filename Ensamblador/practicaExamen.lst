@@ -1,0 +1,48 @@
+     1                                  
+     2                                  segment .data
+     3                                  
+     4 00000000 0A0000000F00000014-     	arreglo1	dd		10, 15, 20, 25, 30, 0
+     4 00000009 000000190000001E00-
+     4 00000012 000000000000       
+     5 00000018 02000000                	k	dd	  2
+     6                                  
+     7                                  segment .bss
+     8                                  
+     9 00000000 <res 14h>               	arreglo2 resd	5
+    10                                  
+    11                                  segment .text
+    12                                  global main
+    13                                  main:
+    14                                  
+    15 00000000 4831C0                  	xor rax, rax
+    16 00000003 4831DB                  	xor rbx, rbx	; base
+    17 00000006 4831F6                  	xor rsi, rsi	; indice
+    18 00000009 4831C9                  	xor rcx, rcx
+    19                                  	
+    20 0000000C 48BB-                   	mov rbx, arreglo1
+    20 0000000E [0000000000000000] 
+    21                                  	
+    22                                  	ciclo:
+    23 00000016 8B0C33                  		mov ecx, [rbx + rsi]
+    24 00000019 89C8                    		mov eax, ecx 
+    25 0000001B 99                      		cdq
+    26 0000001C F73C25[18000000]        		idiv dword[k]
+    27 00000023 83FA00                  		cmp edx, 0
+    28 00000026 740B                    		jz añadir
+    29 00000028 4883C604                		add rsi, 4
+    30                                  		
+    31 0000002C 83F800                  	cmp eax, 0
+    32 0000002F 75E5                    	jnz ciclo
+    33 00000031 EB0C                    	jmp fin
+    34                                  		
+    35                                  	añadir:
+    36 00000033 898E[00000000]          		mov [arreglo2 + rsi], ecx
+    37 00000039 4883C604                		add rsi, 4
+    38 0000003D EBD7                    		jmp ciclo
+    39                                  	
+    40                                  	fin:
+    41                                  
+    42 0000003F C3                      	ret
+    43                                  
+    44                                  
+    45                                  

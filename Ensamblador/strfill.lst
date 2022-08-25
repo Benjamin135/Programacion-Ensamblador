@@ -1,0 +1,38 @@
+     1                                  
+     2                                  segment .data
+     3                                  
+     4 00000000 616263646500            	cadena	db  "abcde", 0
+     5                                  
+     6                                  segment .bss
+     7                                  
+     8                                  
+     9                                  
+    10                                  segment .text
+    11                                  global main
+    12                                  main:
+    13                                  
+    14 00000000 48B9-                   	mov rcx, cadena
+    14 00000002 [0000000000000000] 
+    15 0000000A B261                    	mov dl, 'a'
+    16 0000000C E801000000              	call strfill
+    17                                  
+    18 00000011 C3                      ret
+    19                                  
+    20                                  ;---------------------------------------------------------------------------
+    21                                  ;............Subrutinas............
+    22                                  ;---------------------------------------------------------------------------
+    23                                  
+    24                                  strfill:
+    25 00000012 51                      			push rcx		; preserva rcx porque cambia
+    26                                  	
+    27 00000013 803900                  whileNot0: 	cmp byte[rcx], 0
+    28 00000016 7407                    			je endOfStr
+    29 00000018 8811                    			mov [rcx], dl
+    30 0000001A 48FFC1                  			inc rcx
+    31 0000001D EBF4                    			jmp whileNot0
+    32 0000001F 59                      endOfStr: 	pop rcx
+    33 00000020 C3                      			ret
+    34                                  
+    35                                  
+    36                                  
+    37                                  

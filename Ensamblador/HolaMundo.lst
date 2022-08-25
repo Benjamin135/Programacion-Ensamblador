@@ -1,0 +1,37 @@
+     1                                  
+     2                                  global main
+     3                                  extern printf, scanf
+     4                                  
+     5                                  segment .data
+     6                                  
+     7 00000000 0A486F6C61204D756E-     	msj	  db 	10, "Hola Mundo", 10, 0
+     7 00000009 646F0A00           
+     8                                  
+     9                                  segment .bss
+    10                                  
+    11                                  
+    12                                  
+    13                                  segment .text
+    14                                  main:
+    15                                  
+    16 00000000 4883EC20                sub rsp, 0x20
+    17                                  	
+    18 00000004 48B9-                   	mov rcx, msj
+    18 00000006 [0000000000000000] 
+    19 0000000E E8(00000000)            	call printf
+    20                                  	
+    21 00000013 4883C420                add rsp, 0x20
+    22                                  
+    23 00000017 C3                      ret
+    24                                  
+    25                                  
+    26                                  
+    27                                  
+    28                                  
+    29                                  
+    30                                  
+    31                                  
+    32                                  
+    33                                  
+    34                                  
+    35                                  

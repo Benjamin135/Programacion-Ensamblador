@@ -1,0 +1,39 @@
+     1                                  ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     2                                  ;assemble and link with: 
+     3                                  ;assemble: -->> nasm -f win64 -o P1.o P1.asm -l P1.lst
+     4                                  ;link:	   -->> gcc -o P1 P1.o
+     5                                  ;run:      -->> P1
+     6                                  ;debugger: -->> x64dbg P1
+     7                                  ;%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+     8                                  ;-----------------------------------------
+     9                                  
+    10                                  ;file: P1.asm (nombre programa)
+    11                                  ;registro:
+    12                                  ;nombres y apellidos:
+    13                                  
+    14                                  global main 
+    15                                  extern printf, scanf		
+    16                                  
+    17                                  segment .data
+    18                                  ;aqui se declaran variables inicializadas
+    19 00000000 486F6C61204D756E64-     cadena		DB "Hola Mundo", 0
+    19 00000009 6F00               
+    20 0000000B 41                      caracter 	DB "A"
+    21                                  		
+    22                                  segment .bss
+    23                                  ;Block Started by Symbol(BSS) 
+    24                                  ;aqui van las variables declaradas pero sin inicializar
+    25                                  
+    26                                  
+    27                                  segment .text 				
+    28                                  main:	
+    29                                  ;etiqueta que indica el comienzo del programa principal
+    30                                  ;aqui van las instrucciones
+    31                                  
+    32                                  
+    33 00000000 C3                      ret
+    34                                  ;----------------------------------------
+    35                                  ;aqui se escriben las subrutinas (funciones)
+    36                                  ;..........subrutinas....................	
+    37                                  
+    38 00000001 C3                      ret

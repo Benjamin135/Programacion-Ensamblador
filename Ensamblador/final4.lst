@@ -1,0 +1,117 @@
+     1                                  ;--------------------------------------------------------------------------
+     2                                  ; MODELO EXAMEN FINAL N° 4
+     3                                  ;--------------------------------------------------------------------------
+     4                                  
+     5                                  global main
+     6                                  extern printf, scanf, gets, strlen
+     7                                  
+     8                                  segment .data
+     9                                  
+    10 00000000 0A496E677265736172-     	m1   db   10, "Ingresar la cadena de caracteres (máx. 100 caracteres): ", 0
+    10 00000009 206C6120636164656E-
+    10 00000012 612064652063617261-
+    10 0000001B 63746572657320286D-
+    10 00000024 C3A1782E2031303020-
+    10 0000002D 636172616374657265-
+    10 00000036 73293A2000         
+    11 0000003B 0A4C61206E75657661-     	m2   db   10, "La nueva cadena copiada es: %s", 10, 0
+    11 00000044 20636164656E612063-
+    11 0000004D 6F7069616461206573-
+    11 00000056 3A2025730A00       
+    12                                  ;	m3   db   10, "La longitud es: %lld", 10, 0
+    13                                  ;	m4   db   10, "La cadena ingresada es: %s", 10, 0
+    14                                  	
+    15                                  
+    16                                  segment .bss
+    17                                  
+    18 00000000 <res 64h>               	cad1    resb   100
+    19 00000064 <res 64h>               	cad2    resb   100
+    20                                  
+    21                                  segment .text
+    22                                  main:
+    23                                  
+    24 00000000 4883EC20                sub rsp,0x20
+    25                                  
+    26 00000004 48B9-                   	mov rcx, m1			; Muestra el mensaje "m1"
+    26 00000006 [0000000000000000] 
+    27 0000000E E8(00000000)            	call printf
+    28                                  	
+    29 00000013 48B9-                   	mov rcx, cad1		; Obtiene toda la cadena "cad1"
+    29 00000015 [0000000000000000] 
+    30 0000001D E8(00000000)            	call gets
+    31                                  
+    32                                  ;	mov rcx, m4
+    33                                  ;	mov rdx, cad1
+    34                                  ;	call printf
+    35                                  	
+    36 00000022 48B9-                   	mov rcx, cad1		; Devuelve la longitud de la cadena "cad1"
+    36 00000024 [0000000000000000] 
+    37 0000002C E8(00000000)            	call strlen
+    38                                  
+    39                                  ;	mov rcx, m3
+    40                                  ;	mov rdx, rax
+    41                                  ;	call printf
+    42                                  	
+    43 00000031 48B9-                   	mov rcx, cad1		; referencia
+    43 00000033 [0000000000000000] 
+    44 0000003B 48BA-                   	mov rdx, cad2		; referencia
+    44 0000003D [6400000000000000] 
+    45 00000045 4989C0                  	mov r8, rax			; valor
+    46 00000048 E81E000000              	call copyCad
+    47                                  
+    48 0000004D 48B9-                   	mov rcx, m2			; Muestra el mensaje "m2" concatenada con la cadena "cad2"
+    48 0000004F [3B00000000000000] 
+    49 00000057 48BA-                   	mov rdx, cad2
+    49 00000059 [6400000000000000] 
+    50 00000061 E8(00000000)            	call printf
+    51                                  
+    52 00000066 4883C420                add rsp, 0x20
+    53                                  
+    54 0000006A C3                      ret
+    55                                  
+    56                                  ;---------------------------------------------------------------------------
+    57                                  ;............Subrutinas............
+    58                                  ;---------------------------------------------------------------------------
+    59                                  
+    60                                  copyCad:
+    61                                  
+    62 0000006B 4889CB                  	mov rbx, rcx      ; direccion de la cad1 en rbx
+    63 0000006E 4C89C1                  	mov rcx, r8		  ; iterador
+    64                                  	
+    65 00000071 4831C0                  	xor rax, rax
+    66                                  
+    67                                  	ciclo:
+    68                                  	
+    69 00000074 8A03                    		mov al, [rbx]
+    70 00000076 3C30                    		cmp al, 0x30
+    71 00000078 721B                    		jb noCopiar
+    72 0000007A 3C39                    		cmp al, 0x39
+    73 0000007C 7612                    		jbe siCopiar
+    74                                  		
+    75 0000007E 3C41                    		cmp al, 0x41
+    76 00000080 7213                    		jb noCopiar
+    77 00000082 3C5A                    		cmp al, 0x5A
+    78 00000084 760A                    		jbe siCopiar
+    79                                  		
+    80 00000086 3C61                    		cmp al, 0x61
+    81 00000088 720B                    		jb noCopiar
+    82 0000008A 3C7A                    		cmp al, 0x7A
+    83 0000008C 7602                    		jbe siCopiar
+    84 0000008E EB05                    		jmp noCopiar
+    85                                  		
+    86                                  		siCopiar:
+    87 00000090 8802                    			mov [rdx], al
+    88 00000092 48FFC2                  			inc rdx
+    89                                  		
+    90                                  		noCopiar:
+    91 00000095 48FFC3                  			inc rbx
+    92                                  	
+    93 00000098 E2DA                    	loop ciclo
+    94                                  
+    95 0000009A C3                      ret
+    96                                  
+    97                                  
+    98                                  
+    99                                  
+   100                                  
+   101                                  
