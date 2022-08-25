@@ -1,6 +1,9 @@
+;--------------------------------------------------------------------------
+; assemble: -->> nasm -f win64 -o 2Parcial.o 2Parcial.asm -l 2Parcial.lst
+; link:	   -->> gcc -o 2Parcial 2Parcial.o 
 ; -----------------------------------------------------------------------------
 ; Nombre: Benjamin Condori Vasquez  
-; Registro: 220000999
+; Registro: 2Parcial
 ; -----------------------------------------------------------------------------
 
 segment .data
